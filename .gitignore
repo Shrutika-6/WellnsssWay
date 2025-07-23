@@ -1,0 +1,42 @@
+# === Python bytecode and cache ===
+__pycache__/
+*.py[cod]
+*.so
+# Ignore testing script
+testing.py
+
+# Ignore Haarcascade classifier file
+haarcascade_frontalface_default.xml
+
+# === Virtual environments ===
+venv/
+.venv/
+
+# === Jupyter/IPython ===
+.ipynb_checkpoints/
+questionnaire/
+
+
+# === Environment files ===
+.env
+*.env
+
+# === App-generated folders ===
+uploads/
+db/
+
+# === Machine learning model files (over 100MB or not needed) ===
+*.h5
+
+# Keep only the final model if needed (optional - uncomment below)
+!noraml-saving-best-model-of-all-epochs.h5
+
+# === System/IDE files ===
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# === Logs and temp ===
+*.log
+*.tmp

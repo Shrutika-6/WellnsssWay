@@ -1,0 +1,93 @@
+[
+  {
+    "emotion": "happy",
+    "questions": [
+      "Do you often feel emotionally flat or disconnected?",
+      "When was the last time you felt a strong emotion, positive or negative?",
+      "Do things that used to excite or upset you now feel meaningless?",
+      "Do you sometimes go through the day without really feeling it?",
+      "Have others noticed that you seem distant or not yourself?",
+      "Is the numbness a relief to you, or does it worry you?",
+      "Do you feel present in your body and surroundings?",
+      "Are there moments when you want to cry or laugh but just can't?"
+    ]
+  },
+  {
+    "emotion": "sad",
+    "questions": [
+      "How often do you feel sad or down, and how long do those feelings last?",
+      "Do you know what triggers your sadness, or does it come without reason?",
+      "Have you lost interest in activities you once enjoyed?",
+      "How is your sleep and appetite lately?",
+      "Do you find it difficult to get out of bed or start your day?",
+      "Have you experienced any major losses or disappointments recently?",
+      "Do you ever feel like crying without knowing exactly why?",
+      "Have you had thoughts of hopelessness or that things won't improve?"
+    ]
+  },
+  {
+    "emotion": "angry",
+    "questions": [
+      "How easily do you get irritated or frustrated?",
+      "What kinds of situations or people tend to trigger your anger?",
+      "Do you express your anger outwardly, or do you bottle it up?",
+      "How do others usually react to your anger?",
+      "Have you ever regretted something you did or said while angry?",
+      "Do you ever feel guilty after expressing anger?",
+      "Is your anger tied to specific people or past events?",
+      "Do you ever feel like your anger controls you?"
+    ]
+  },
+  {
+    "emotion": "fear",
+    "questions": [
+      "What situations or thoughts make you feel afraid or anxious?",
+      "Do you experience physical symptoms when you're scared (e.g., racing heart, sweating)?",
+      "Do you avoid certain activities or people because of fear?",
+      "Is your fear based on past trauma or imagined scenarios?",
+      "How often does fear interfere with your daily life?",
+      "Can you usually calm yourself down, or does the fear feel overwhelming?",
+      "Do you feel constantly on edge, even when nothing seems wrong?",
+      "Do you fear being judged, failing, or losing control?"
+    ]
+  },
+  {
+    "emotion": "disgust",
+    "questions": [
+      "Do you often feel disgusted by yourself or your body?",
+      "Are there habits or thoughts you find intensely repulsive or disturbing?",
+      "Do you find it difficult to tolerate certain people or situations?",
+      "Has this feeling of disgust impacted your relationships or daily functioning?",
+      "Is the feeling sudden, or does it build over time?",
+      "Do you feel ashamed for feeling disgusted?",
+      "Have you ever tried to avoid or fix things that cause this reaction?",
+      "Is the disgust linked to past experiences or memories?"
+    ]
+  },
+  {
+    "emotion": "surprise",
+    "questions": [
+      "Have you experienced anything recently that caught you completely off guard?",
+      "How did you react emotionally to that unexpected situation?",
+      "Do you usually like surprises, or do they make you uncomfortable?",
+      "Have recent events made you feel unprepared or out of control?",
+      "Did any recent surprise affect your trust in someone?",
+      "Was the surprise positive or negative, and how long did it affect you?",
+      "How do you generally cope with sudden change?",
+      "Do surprises make you feel excited, scared, or overwhelmed?"
+    ]
+  },
+  {
+    "emotion": "neutral",
+    "questions": [
+      "Do you often feel emotionally flat or disconnected?",
+      "When was the last time you felt a strong emotion, positive or negative?",
+      "Do things that used to excite or upset you now feel meaningless?",
+      "Do you sometimes go through the day without really feeling it?",
+      "Have others noticed that you seem distant or not yourself?",
+      "Is the numbness a relief to you, or does it worry you?",
+      "Do you feel present in your body and surroundings?",
+      "Are there moments when you want to cry or laugh but just can't?"
+    ]
+  }
+]

@@ -1,0 +1,114 @@
+[
+  {
+    "emotion": "happy",
+    "recommendations": [
+      "Celebrate your joy with friends",
+      "Capture the moment in a journal",
+      "Listen to upbeat music",
+      "Do something creative",
+      "Share your happiness with someone"
+    ]
+  },
+  {
+    "emotion": "sad",
+    "recommendations": [
+      "Talk to a close friend or family member",
+      "Watch a comforting movie",
+      "Listen to calming music",
+      "Write your thoughts in a journal",
+      "Try a short walk in nature",
+      "Cognitive Behavioral Therapy (CBT): To challenge negative thought patterns.",
+      "Medication: Antidepressants like SSRIs if clinically depressed.",
+      "Behavioral Activation: Encouraging re-engagement in pleasurable or purposeful activities.",
+      "Grief Counseling: If sadness is tied to a loss.",
+      "Sleep and Nutrition Planning: To improve energy and mood regulation.",
+      "Mood Tracking: Journaling or apps to recognize emotional patterns.",
+      "Mindfulness & Meditation: To stay grounded in the present."
+    ]
+  },
+  {
+    "emotion": "angry",
+    "recommendations": [
+      "Take deep breaths for a few minutes",
+      "Go for a walk or run",
+      "Listen to soothing music",
+      "Write your feelings down",
+      "Practice mindfulness or meditation",
+      "Anger Management Therapy: To develop healthy outlets and communication.",
+      "Cognitive Behavioral Therapy (CBT): To understand the thoughts behind anger.",
+      "Impulse Control Training: Techniques to pause before reacting.",
+      "Stress-Relief Activities: Such as exercise, art, or breathwork.",
+      "Past Trauma Work: If anger is rooted in unresolved emotional pain.",
+      "Relaxation Techniques: Deep breathing, progressive muscle relaxation.",
+      "Group Therapy: For shared experiences and social learning."
+    ]
+  },
+  {
+    "emotion": "fear",
+    "recommendations": [
+      "Remind yourself that you're safe",
+      "Practice grounding techniques",
+      "Talk to someone you trust",
+      "Take slow deep breaths",
+      "Write down your fears and challenge them",
+      "Exposure Therapy: Gradual facing of fears in a controlled way.",
+      "Cognitive Behavioral Therapy (CBT): Restructuring irrational or catastrophic thoughts.",
+      "Anxiety Medication: Such as SSRIs or short-term benzodiazepines.",
+      "Relaxation & Breathing Exercises: For grounding during anxiety episodes.",
+      "Mindfulness-Based Stress Reduction (MBSR): To reduce panic and stay present.",
+      "Trauma-Focused Therapy: EMDR or somatic experiencing.",
+      "Lifestyle Changes: Limiting caffeine, improving sleep, and regular exercise."
+    ]
+  },
+  {
+    "emotion": "surprise",
+    "recommendations": [
+      "Reflect on why you feel surprised",
+      "Talk about it with someone",
+      "Write your feelings in a journal",
+      "Channel the energy into something creative",
+      "Stay present and breathe deeply",
+      "Crisis Counseling: For immediate support after a life-altering event.",
+      "Stress Inoculation Training (SIT): Preparing mentally for future surprises.",
+      "Grounding Techniques: To manage emotional shock or confusion.",
+      "Narrative Therapy: To process and make sense of unexpected events.",
+      "Emotion Regulation Skills: From Dialectical Behavior Therapy (DBT).",
+      "Psychoeducation: Teaching how the brain responds to surprise and stress.",
+      "Support Groups: To normalize feelings during major life changes."
+    ]
+  },
+  {
+    "emotion": "disgust",
+    "recommendations": [
+      "Take a break and shift your focus",
+      "Practice gratitude for positive things",
+      "Cleanse your space or environment",
+      "Talk through your feelings with a friend",
+      "Journal about what triggered the feeling",
+      "Exposure and Response Prevention (ERP): Especially helpful for OCD.",
+      "Cognitive Behavioral Therapy (CBT): To challenge exaggerated or distorted beliefs tied to disgust.",
+      "Body Image Therapy: If related to appearance or self-loathing.",
+      "Compassion-Focused Therapy (CFT): To develop kindness toward self and others.",
+      "Trauma Counseling: To address root causes if disgust is trauma-related.",
+      "Mindfulness Practice: To reduce judgmental reactions.",
+      "Behavioral Experiments: To test and challenge avoidant behaviors."
+    ]
+  },
+  {
+    "emotion": "neutral",
+    "recommendations": [
+      "Do something relaxing like reading",
+      "Check in with your emotions quietly",
+      "Listen to your favorite music",
+      "Take a mindful walk",
+      "Drink some water and take a deep breath",
+      "Emotion-Focused Therapy (EFT): To reconnect with suppressed emotions.",
+      "Somatic Therapy: To help patients feel reconnected to their body.",
+      "Cognitive Behavioral Therapy (CBT) or Dialectical Behavior Therapy (DBT): To explore and rebuild emotional experiences.",
+      "Antidepressant Medication: If caused by major depressive disorder.",
+      "Creative Therapies: Art, music, or movement to rekindle feeling.",
+      "Mindfulness & Grounding Practices: To bring awareness to the present.",
+      "Structured Routine Building: Reestablishing purpose and emotional engagement."
+    ]
+  }
+]
