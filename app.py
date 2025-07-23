@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import numpy as np
+import numpy as np 
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 import base64
@@ -33,18 +33,63 @@ responses_col = db["emotion_responses"]
 recommendations_col = db["recommendations"]
 
 # Utility: Decode base64 image
+# def decode_image(image_base64):
+#     try:
+#         header, encoded = image_base64.split(",", 1)
+#         image_bytes = base64.b64decode(encoded)
+#         image = Image.open(BytesIO(image_bytes)).convert("L")  # grayscale
+#         image = image.resize((48, 48))
+#         image_array = np.array(image) / 255.0
+#         image_array = np.expand_dims(image_array, axis=0)
+#         image_array = np.expand_dims(image_array, axis=-1)
+#         return image_array
+#     except Exception as e:
+#         print("Image decoding error:", e)
+#         return None
+import os
+
+# Load Haar cascade safely
+cascade_path = "haarcascade_frontalface_default.xml"
+if not os.path.exists(cascade_path):
+    raise FileNotFoundError(f"Haar cascade file not found at: {cascade_path}")
+
+face_cascade = cv2.CascadeClassifier(cascade_path)
+if face_cascade.empty():
+    raise Exception("❌ Failed to load Haar cascade XML file!")
+
 def decode_image(image_base64):
     try:
+        # Decode base64
         header, encoded = image_base64.split(",", 1)
         image_bytes = base64.b64decode(encoded)
-        image = Image.open(BytesIO(image_bytes)).convert("L")  # grayscale
-        image = image.resize((48, 48))
-        image_array = np.array(image) / 255.0
-        image_array = np.expand_dims(image_array, axis=0)
-        image_array = np.expand_dims(image_array, axis=-1)
-        return image_array
+
+        # Convert to grayscale
+        image = Image.open(BytesIO(image_bytes)).convert("L")
+        image_np = np.array(image)
+
+        # Save image for debugging
+        cv2.imwrite("received.jpg", image_np)
+
+        # Detect faces
+        faces = face_cascade.detectMultiScale(image_np, scaleFactor=1.1, minNeighbors=5)
+
+        if len(faces) == 0:
+            print("⚠️ No face detected. Falling back to full frame.")
+            # Fallback: use full image
+            face = cv2.resize(image_np, (48, 48)) / 255.0
+        else:
+            x, y, w, h = faces[0]
+            face = image_np[y:y+h, x:x+w]
+            face = cv2.resize(face, (48, 48)) / 255.0
+
+        # Reshape for model
+        face = np.expand_dims(face, axis=0)       # (1, 48, 48)
+        face = np.expand_dims(face, axis=-1)      # (1, 48, 48, 1)
+
+        return face
+
     except Exception as e:
-        print("Image decoding error:", e)
+        print("❌ Image decoding error:", e)
         return None
 
 # --------------------------
