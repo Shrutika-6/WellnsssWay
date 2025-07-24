@@ -41,7 +41,7 @@ function EmotionDetection() {
       });
   }, []);
 
-  useEffect(() => {
+  useEffect(() => { 
     let interval;
     if (isDetecting) {
       interval = setInterval(() => {
@@ -68,7 +68,7 @@ function EmotionDetection() {
     if (!video || !canvas) return;
 
     const context = canvas.getContext("2d");
-    context.drawImage(video, 0, 0, 48, 48);
+    context.drawImage(video, 0, 0, 224, 224);
     const imageData = canvas.toDataURL("image/jpeg");
 
     fetch("http://127.0.0.1:5000/predict", {
