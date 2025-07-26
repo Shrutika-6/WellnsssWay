@@ -3,7 +3,6 @@ __pycache__/
 *.py[cod]
 *.so
 # Ignore testing script
-testing.py
 
 # Ignore Haarcascade classifier file
 haarcascade_frontalface_default.xml
@@ -42,3 +41,5 @@ Thumbs.db
 *.tmp
 
 ferenv
+debug_original.jpg
+received.jpg
