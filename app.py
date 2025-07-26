@@ -60,6 +60,9 @@ if face_cascade.empty():
 # Update your decode_image function to be more robust
 def decode_image(image_base64):
     try:
+        # Add debugging
+        print("Processing image...")
+        
         # Decode base64
         header, encoded = image_base64.split(",", 1) if "," in image_base64 else ("", image_base64)
         image_bytes = base64.b64decode(encoded)
