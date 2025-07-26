@@ -57,41 +57,51 @@ face_cascade = cv2.CascadeClassifier(cascade_path)
 if face_cascade.empty():
     raise Exception("❌ Failed to load Haar cascade XML file!")
 
+# Update your decode_image function to be more robust
 def decode_image(image_base64):
     try:
         # Decode base64
-        header, encoded = image_base64.split(",", 1)
+        header, encoded = image_base64.split(",", 1) if "," in image_base64 else ("", image_base64)
         image_bytes = base64.b64decode(encoded)
 
-        # Convert to grayscale
-        image = Image.open(BytesIO(image_bytes)).convert("L")
-        image_np = np.array(image)
+        # Convert to numpy array
+        image = Image.open(BytesIO(image_bytes))
+        image_np = np.array(image.convert("L"))  # Convert to grayscale
 
-        # Save image for debugging
-        cv2.imwrite("received.jpg", image_np)
+        # Save original for debugging
+        cv2.imwrite("debug_original.jpg", image_np)
 
-        # Detect faces
-        faces = face_cascade.detectMultiScale(image_np, scaleFactor=1.1, minNeighbors=5)
+        # Detect faces with more conservative parameters
+        faces = face_cascade.detectMultiScale(
+            image_np,
+            scaleFactor=1.05,
+            minNeighbors=5,
+            minSize=(30, 30),
+            flags=cv2.CASCADE_SCALE_IMAGE
+        )
 
         if len(faces) == 0:
-            print("⚠️ No face detected. Falling back to full frame.")
-            # Fallback: use full image
-            face = cv2.resize(image_np, (48, 48)) / 255.0
+            print("No face detected - using full image")
+            # Use center crop if no face detected
+            h, w = image_np.shape
+            size = min(h, w)
+            offset_h = (h - size) // 2
+            offset_w = (w - size) // 2
+            face_roi = image_np[offset_h:offset_h+size, offset_w:offset_w+size]
         else:
-            x, y, w, h = faces[0]
-            face = image_np[y:y+h, x:x+w]
-            face = cv2.resize(face, (48, 48)) / 255.0
+            # Use the largest face found
+            x, y, w, h = max(faces, key=lambda f: f[2] * f[3])
+            face_roi = image_np[y:y+h, x:x+w]
 
-        # Reshape for model
-        face = np.expand_dims(face, axis=0)       # (1, 48, 48)
-        face = np.expand_dims(face, axis=-1)      # (1, 48, 48, 1)
+        # Resize and normalize
+        face = cv2.resize(face_roi, (48, 48)) / 255.0
+        face = np.expand_dims(face, axis=(0, -1))  # Add batch and channel dims
 
         return face
 
     except Exception as e:
-        print("❌ Image decoding error:", e)
+        print(f"Image processing error: {str(e)}")
         return None
-
 # --------------------------
 # Route: Home
 # --------------------------

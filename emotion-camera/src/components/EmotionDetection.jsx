@@ -1,5 +1,5 @@
 // components/EmotionDetection.jsx
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import EmotionVideo from "./EmotionVideo";
 import DetectionStatus from "./DetectionStatus";
 import StartButton from "./StartButton";
@@ -9,8 +9,9 @@ import { useNavigate } from "react-router-dom";
 function EmotionDetection() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const [stream, setStream] = useState(null);
 
-  const [currentEmotion, setCurrentEmotion] = useState("Detecting...");
+  const [currentEmotion, setCurrentEmotion] = useState("Waiting to start...");
   const [stableEmotion, setStableEmotion] = useState(null);
   const [emotionCounts, setEmotionCounts] = useState({
     angry: 0,
@@ -26,22 +27,88 @@ function EmotionDetection() {
   const [detectionTime, setDetectionTime] = useState(0);
   const [isDetecting, setIsDetecting] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
+  const [error, setError] = useState(null);
 
+  // Clean up stream on unmount
   useEffect(() => {
-    navigator.mediaDevices
-      .getUserMedia({ video: true })
-      .then((stream) => {
+    return () => {
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop());
+      }
+    };
+  }, [stream]);
+
+  // Initialize webcam
+  useEffect(() => {
+    const initWebcam = async () => {
+      try {
+        const mediaStream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            width: { ideal: 640 },
+            height: { ideal: 480 },
+            facingMode: "user",
+          },
+          audio: false,
+        });
+        setStream(mediaStream);
         if (videoRef.current) {
-          videoRef.current.srcObject = stream;
+          videoRef.current.srcObject = mediaStream;
         }
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error("Webcam error:", err);
-        setCurrentEmotion("Webcam access denied");
-      });
+        setError("Webcam access denied or not available");
+      }
+    };
+
+    initWebcam();
   }, []);
 
-  useEffect(() => { 
+  // Detection logic
+  const captureAndSendFrame = useCallback(async () => {
+    if (!videoRef.current || !canvasRef.current) return;
+
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+
+    // Set canvas size to match video feed
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const context = canvas.getContext("2d");
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    try {
+      // Convert to JPEG with lower quality for faster transfer
+      const imageData = canvas.toDataURL("image/jpeg", 0.7);
+
+      const response = await fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image: imageData }),
+      });
+
+      if (!response.ok) throw new Error("Network response was not ok");
+
+      const data = await response.json();
+      const detectedEmotion = data.emotion?.toLowerCase() || "neutral";
+
+      setCurrentEmotion(detectedEmotion);
+      setEmotionCounts((prev) => {
+        const updated = {
+          ...prev,
+          [detectedEmotion]: prev[detectedEmotion] + 1,
+        };
+        emotionCountsRef.current = updated;
+        return updated;
+      });
+    } catch (err) {
+      console.error("Detection error:", err);
+      setCurrentEmotion("Detection error");
+    }
+  }, []);
+
+  // Timer effect
+  useEffect(() => {
     let interval;
     if (isDetecting) {
       interval = setInterval(() => {
@@ -54,63 +121,24 @@ function EmotionDetection() {
           }
           return newTime;
         });
-      }, 1000);
+      }, 1000); // Adjust interval if needed (e.g., 1500ms)
     }
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [isDetecting]);
+    return () => clearInterval(interval);
+  }, [isDetecting, captureAndSendFrame]);
 
-  const captureAndSendFrame = () => {
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-
-    if (!video || !canvas) return;
-
-    const context = canvas.getContext("2d");
-    context.drawImage(video, 0, 0, 224, 224);
-    const imageData = canvas.toDataURL("image/jpeg");
-
-    fetch("http://127.0.0.1:5000/predict", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ image: imageData }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        const detectedEmotion = data.emotion?.toLowerCase() || "neutral";
-        setCurrentEmotion(detectedEmotion);
-        setEmotionCounts((prev) => {
-          const updated = {
-            ...prev,
-            [detectedEmotion]: prev[detectedEmotion] + 1,
-          };
-          emotionCountsRef.current = updated;
-          return updated;
-        });
-      })
-      .catch((err) => {
-        console.error("Fetch error:", err);
-        setCurrentEmotion("Error connecting to server");
-      });
-  };
-
-  const finishDetection = () => {
+  const finishDetection = useCallback(() => {
     setIsDetecting(false);
-    const localCounts = { ...emotionCountsRef.current };
-    let maxEmotion = "neutral";
-    let maxCount = 0;
-    for (const [emotion, count] of Object.entries(localCounts)) {
-      if (count > maxCount) {
-        maxCount = count;
-        maxEmotion = emotion;
-      }
-    }
+    const counts = emotionCountsRef.current;
+    const maxEmotion = Object.entries(counts).reduce(
+      (max, [emotion, count]) => (count > max.count ? { emotion, count } : max),
+      { emotion: "neutral", count: 0 }
+    ).emotion;
+
     setStableEmotion(maxEmotion);
     setCurrentEmotion(maxEmotion);
-  };
+  }, []);
 
-  const handleStartDetection = () => {
+  const handleStartDetection = useCallback(() => {
     setHasStarted(true);
     setIsDetecting(true);
     setDetectionTime(0);
@@ -125,28 +153,36 @@ function EmotionDetection() {
     });
     setCurrentEmotion("Detecting...");
     setStableEmotion(null);
-  };
+    setError(null);
+  }, []);
 
   const navigate = useNavigate();
 
-  const redirectToEmotionPage = () => {
+  const redirectToEmotionPage = useCallback(() => {
     if (stableEmotion) {
       navigate(`/${stableEmotion}`);
     }
-  };
+  }, [stableEmotion, navigate]);
 
   return (
-    <div>
+    <div className="emotion-detection-container">
       <h1 className="app-title">Emotion Detection & Support</h1>
-      <EmotionVideo videoRef={videoRef} canvasRef={canvasRef} />
+
+      {error && <div className="error-message">{error}</div>}
+
+      <EmotionVideo
+        videoRef={videoRef}
+        canvasRef={canvasRef}
+        isDetecting={isDetecting}
+      />
 
       {!hasStarted ? (
-        <StartButton onClick={handleStartDetection} />
+        <StartButton onClick={handleStartDetection} disabled={!!error} />
       ) : (
         <div className="results-container">
           <h3 className="current-emotion">
             Current Emotion:{" "}
-            <span className="emotion-value">
+            <span className={`emotion-value ${currentEmotion.toLowerCase()}`}>
               {isDetecting ? currentEmotion : stableEmotion}
             </span>
           </h3>

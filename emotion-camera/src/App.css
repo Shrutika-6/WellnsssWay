@@ -497,3 +497,35 @@ body::before {
   background-color: rgba(143, 27, 159, 0.9);
   transform: scale(1.05);
 }
+
+/* Video detection css */
+.video-container {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.video-feed {
+  width: 100%;
+  border-radius: 8px;
+  transform: scaleX(-1); /* mirror effect */
+  background-color: #f0f0f0;
+}
+
+.video-feed.detecting {
+  box-shadow: 0 0 10px rgba(0, 200, 0, 0.5);
+}
+
+.error-message {
+  color: #ff3333;
+  background: #ffeeee;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 10px 0;
+}
+
+.emotion-value {
+  text-transform: capitalize;
+  font-weight: bold;
+}
