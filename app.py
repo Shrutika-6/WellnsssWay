@@ -1,3 +1,4 @@
+# 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import numpy as np 
@@ -23,7 +24,7 @@ CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 model = load_model("noraml-saving-best-model-of-all-epochs.h5")
 
 # Define emotion labels
-emotion_labels = ["angry", "disgust", "fear", "happy", "sad", "surprise", "neutral"]
+emotion_labels = ["angry", "disgust", "fear", "happy", "neutral", "sad", "surprise"]
 
 # MongoDB setup
 client = MongoClient("mongodb://localhost:27017/")
@@ -60,6 +61,9 @@ if face_cascade.empty():
 # Update your decode_image function to be more robust
 def decode_image(image_base64):
     try:
+        # Add debugging
+        print("Processing image...")
+        
         # Decode base64
         header, encoded = image_base64.split(",", 1) if "," in image_base64 else ("", image_base64)
         image_bytes = base64.b64decode(encoded)
@@ -75,29 +79,35 @@ def decode_image(image_base64):
         faces = face_cascade.detectMultiScale(
             image_np,
             scaleFactor=1.05,
-            minNeighbors=5,
-            minSize=(30, 30),
-            flags=cv2.CASCADE_SCALE_IMAGE
+            minNeighbors=3,
+            # minSize=(30, 30),
+            # flags=cv2.CASCADE_SCALE_IMAGE
         )
 
-        if len(faces) == 0:
-            print("No face detected - using full image")
-            # Use center crop if no face detected
-            h, w = image_np.shape
-            size = min(h, w)
-            offset_h = (h - size) // 2
-            offset_w = (w - size) // 2
-            face_roi = image_np[offset_h:offset_h+size, offset_w:offset_w+size]
-        else:
-            # Use the largest face found
-            x, y, w, h = max(faces, key=lambda f: f[2] * f[3])
-            face_roi = image_np[y:y+h, x:x+w]
+        # if len(faces) == 0:
+        #     print("No face detected - using full image")
+        #     # Use center crop if no face detected
+        #     h, w = image_np.shape
+        #     size = min(h, w)
+        #     offset_h = (h - size) // 2
+        #     offset_w = (w - size) // 2
+        #     face_roi = image_np[offset_h:offset_h+size, offset_w:offset_w+size]
+        # else:
+        #     # Use the largest face found
+        #     x, y, w, h = max(faces, key=lambda f: f[2] * f[3])
+        #     face_roi = image_np[y:y+h, x:x+w]
+        
+        for x,y,w,h in faces:
+            sub_face_img=image_np[y:y+h, x:x+w]
+            resized=cv2.resize(sub_face_img,(48,48))
+            normalize=resized/255.0
+            reshaped=np.reshape(normalize, (1, 48, 48, 1))
 
-        # Resize and normalize
-        face = cv2.resize(face_roi, (48, 48)) / 255.0
-        face = np.expand_dims(face, axis=(0, -1))  # Add batch and channel dims
+        # # Resize and normalize
+        # face = cv2.resize(face_roi, (48, 48)) / 255.0
+        # face = np.expand_dims(face, axis=(0, -1))  # Add batch and channel dims
 
-        return face
+        return reshaped
 
     except Exception as e:
         print(f"Image processing error: {str(e)}")
