@@ -66,28 +66,32 @@ function EmotionDetection() {
   // Detection logic
   const captureAndSendFrame = useCallback(async () => {
     if (!videoRef.current || !canvasRef.current) return;
-
+    
     const video = videoRef.current;
     const canvas = canvasRef.current;
-
-    // Set canvas size to match video feed
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-
+    
+    // Ensure proper canvas dimensions
+    canvas.width = 640;  // Fixed dimensions
+    canvas.height = 480;
+    
     const context = canvas.getContext("2d");
+    
+    // Disable image smoothing for sharper images
+    context.imageSmoothingEnabled = false;
+    
+    // Draw video frame
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
+    
     try {
-      // Convert to JPEG with lower quality for faster transfer
-      const imageData = canvas.toDataURL("image/jpeg", 0.7);
-
-      const response = await fetch("http://127.0.0.1:5000/predict", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ image: imageData }),
-      });
-
-      if (!response.ok) throw new Error("Network response was not ok");
+        // Use PNG for lossless compression
+        const imageData = canvas.toDataURL("image/png");
+        
+        const response = await fetch("http://127.0.0.1:5000/predict", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ image: imageData }),
+        });
+        if (!response.ok) throw new Error("Network response was not ok");
 
       const data = await response.json();
       const detectedEmotion = data.emotion?.toLowerCase() || "neutral";
@@ -101,11 +105,55 @@ function EmotionDetection() {
         emotionCountsRef.current = updated;
         return updated;
       });
+        
+        // Rest of your code...
     } catch (err) {
-      console.error("Detection error:", err);
-      setCurrentEmotion("Detection error");
+        console.error("Detection error:", err);
     }
-  }, []);
+}, []);
+
+  // const captureAndSendFrame = useCallback(async () => {
+  //   if (!videoRef.current || !canvasRef.current) return;
+
+  //   const video = videoRef.current;
+  //   const canvas = canvasRef.current;
+
+  //   // Set canvas size to match video feed
+  //   canvas.width = video.videoWidth;
+  //   canvas.height = video.videoHeight;
+
+  //   const context = canvas.getContext("2d");
+  //   context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  //   try {
+  //     // Convert to JPEG with lower quality for faster transfer
+  //     const imageData = canvas.toDataURL("image/png");
+
+  //     const response = await fetch("http://127.0.0.1:5000/predict", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ image: imageData }),
+  //     });
+
+  //     if (!response.ok) throw new Error("Network response was not ok");
+
+  //     const data = await response.json();
+  //     const detectedEmotion = data.emotion?.toLowerCase() || "neutral";
+
+  //     setCurrentEmotion(detectedEmotion);
+  //     setEmotionCounts((prev) => {
+  //       const updated = {
+  //         ...prev,
+  //         [detectedEmotion]: prev[detectedEmotion] + 1,
+  //       };
+  //       emotionCountsRef.current = updated;
+  //       return updated;
+  //     });
+  //   } catch (err) {
+  //     console.error("Detection error:", err);
+  //     setCurrentEmotion("Detection error");
+  //   }
+  // }, []);
 
   // Timer effect
   useEffect(() => {
@@ -207,3 +255,5 @@ function EmotionDetection() {
 }
 
 export default EmotionDetection;
+
+
