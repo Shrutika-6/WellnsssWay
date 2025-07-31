@@ -108,13 +108,6 @@ const cards = [
     image: "/placeholder.svg?height=240&width=280&text=Smart+Recommendations",
     path: "/about", // Added path for redirection
   },
-  {
-    title: "🤖 Score Calculator",
-    description:
-      "This tool helps you understand your mental health status and guides you towards better emotional balance. It provides a quick assessment of your emotional well-being.",
-    image: "/placeholder.svg?height=240&width=280&text=Calming+Techniques",
-    path: "/calculator",
-  },
 ];
 
 const styles = {
