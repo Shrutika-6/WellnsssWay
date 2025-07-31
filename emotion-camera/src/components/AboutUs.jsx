@@ -57,7 +57,7 @@ const AboutUs = () => {
                 img: mansiImg
               },
               {
-                name: 'Tushar Kumar Kanaujiya',
+                name: 'Tushar Kumar Kannojia',
                 roll: '23BCS251',
                 phone: '9928907039',
                 role: 'Full Stack Developer',
