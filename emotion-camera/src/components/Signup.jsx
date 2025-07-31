@@ -8,7 +8,7 @@ function Signup() {
   const [name, setName] = useState()
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
-  const navigate = useNavigate() // From react-router-dom
+  const navigate = useNavigate() 
 
   const handleSubmit = (e) => {
     e.preventDefault()
