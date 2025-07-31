@@ -42,7 +42,7 @@ export default function Login() {
           boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
           width: "100%",
           maxWidth: "600px",
-          padding: "2rem",
+          padding: "1.8rem",
           boxSizing: "border-box",
         }}
       >
