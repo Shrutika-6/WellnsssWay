@@ -1,12 +1,12 @@
-"use client" 
-import { useNavigate, Link } from "react-router-dom" 
+"use client";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Home() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleStart = () => {
-    navigate("/emotion-detection")
-  }
+    navigate("/emotion-detection");
+  };
 
   return (
     <div style={styles.container}>
@@ -15,8 +15,8 @@ export default function Home() {
         <div style={{ ...styles.card, animation: "fadeIn 1s ease-out" }}>
           <h1 style={styles.heading}>Welcome to Wellness Way </h1>
           <p style={styles.description}>
-            Understand your emotions using real-time camera-based detection and explore calming strategies that truly
-            help.
+            Understand your emotions using real-time camera-based detection and
+            explore calming strategies that truly help.
           </p>
           <p style={styles.quote}>
             {
@@ -26,8 +26,14 @@ export default function Home() {
           <button
             onClick={handleStart}
             style={styles.button}
-            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = styles.buttonHover.backgroundColor)}
-            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = styles.button.backgroundColor)}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.backgroundColor =
+                styles.buttonHover.backgroundColor)
+            }
+            onMouseOut={(e) =>
+              (e.currentTarget.style.backgroundColor =
+                styles.button.backgroundColor)
+            }
           >
             Start Detection
           </button>
@@ -40,16 +46,24 @@ export default function Home() {
               key={index}
               to={card.path}
               style={{
-                textDecoration: "none", 
-                color: "inherit", 
+                textDecoration: "none",
+                color: "inherit",
                 cursor: "pointer",
-                opacity: 0, 
+                opacity: 0,
                 animation: `fadeIn 1s ease ${index * 0.2}s both`,
                 ...styles.infoCard,
-                backgroundImage: `url(${card.image || "/placeholder.svg?height=240&width=280&text=Card+Image"})`,
+                backgroundImage: `url(${
+                  card.image ||
+                  "/placeholder.svg?height=240&width=280&text=Card+Image"
+                })`,
               }}
-              onMouseOver={(e) => (e.currentTarget.style.transform = styles.infoCardHover.transform)}
-              onMouseOut={(e) => (e.currentTarget.style.transform = styles.infoCard.transform)}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.transform =
+                  styles.infoCardHover.transform)
+              }
+              onMouseOut={(e) =>
+                (e.currentTarget.style.transform = styles.infoCard.transform)
+              }
             >
               <div style={styles.infoCardOverlay}>
                 <h3 style={styles.infoHeading}>{card.title}</h3>
@@ -69,35 +83,39 @@ export default function Home() {
         </style>
       </div>
     </div>
-  )
+  );
 }
 
 const cards = [
   {
-    title: "🎥 Real-Time Emotion Tracking",
-    description: "Harness facial expression detection to uncover how you're really feeling in the moment.",
+    title: "🎥Emotion Tracking",
+    description:
+      "Harness facial expression detection to uncover how you're really feeling in the moment. This tool uses your camera to analyze your emotions and provide insights into your emotional state",
     image: "/placeholder.svg?height=240&width=280&text=Emotion+Tracking",
     path: "/emotion-detection",
-  }, 
+  },
   {
     title: "📊 Insights",
-    description: "Take a moment to reconnect with yourself. Explore calming breathing techniques, gentle body scans, and grounding practices to help reduce stress, increase focus, and bring balance to your emotions.",
+    description:
+      "Take a moment to reconnect with yourself. Explore calming breathing techniques, gentle body scans, and grounding practices to help reduce stress, increase focus, and bring balance to your emotions.",
     image: "/placeholder.svg?height=240&width=280&text=Progress+Insights",
-    path: "/insights", 
+    path: "/insights",
   },
   {
-    title: "🧘 Smart Recommendations",
-    description: "Get emotion-specific coping strategies based on live analysis to help you feel better faster.",
+    title: "🛠️About us",
+    description:
+      "Discover how we aim to empower individual to understand and manage their emotions effectively. Learn about our mission. vision and the team behind Wellnesss Way",
     image: "/placeholder.svg?height=240&width=280&text=Smart+Recommendations",
-    path: "/recommendations", // Added path for redirection
+    path: "/about_us", // Added path for redirection
   },
   {
-    title: "🤖 Mental Health Score Calculator",
-    description: "This tool helps you understand your mental health status and guides you towards better emotional balance. It provides a quick assessment of your emotional well-being.",
+    title: "🤖 Score Calculator",
+    description:
+      "This tool helps you understand your mental health status and guides you towards better emotional balance. It provides a quick assessment of your emotional well-being.",
     image: "/placeholder.svg?height=240&width=280&text=Calming+Techniques",
-    path: "/calculator", 
+    path: "/calculator",
   },
-]
+];
 
 const styles = {
   container: {
@@ -106,7 +124,8 @@ const styles = {
     left: 0,
     width: "100vw",
     height: "100vh",
-    backgroundImage: "url('/placeholder.svg?height=1080&width=1920&text=Abstract+Background')",
+    backgroundImage:
+      "url('/placeholder.svg?height=1080&width=1920&text=Abstract+Background')",
     backgroundSize: "cover",
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
@@ -124,8 +143,8 @@ const styles = {
   card: {
     backgroundColor: "rgba(25, 25, 35, 0.9)",
     borderRadius: "16px",
-    padding: "30px", 
-    maxWidth: "650px", 
+    padding: "30px",
+    maxWidth: "650px",
     width: "90%",
     textAlign: "center",
     marginBottom: "50px",
@@ -134,23 +153,23 @@ const styles = {
     border: "none",
   },
   heading: {
-    fontSize: "2.5rem", 
-    marginBottom: "20px", 
+    fontSize: "2.5rem",
+    marginBottom: "20px",
     color: "#ffffff",
     fontWeight: "900",
     textShadow: "0 2px 4px rgba(0,0,0,0.5)",
   },
   description: {
-    fontSize: "1.1rem", 
+    fontSize: "1.1rem",
     color: "rgba(255, 255, 255, 0.85)",
     marginBottom: "15px",
     lineHeight: "1.6",
   },
   quote: {
-    fontSize: "1rem", 
+    fontSize: "1rem",
     fontStyle: "italic",
     color: "rgba(255, 255, 255, 0.7)",
-    marginBottom: "30px", 
+    marginBottom: "30px",
     lineHeight: "1.5",
   },
   button: {
@@ -163,7 +182,6 @@ const styles = {
     cursor: "pointer",
     transition: "background-color 0.3s ease, transform 0.2s ease",
     fontWeight: "700",
-
   },
   buttonHover: {
     backgroundColor: "#531f35ff",
@@ -225,4 +243,4 @@ const styles = {
     color: "#e0e0e0",
     lineHeight: "1.5",
   },
-}
+};
