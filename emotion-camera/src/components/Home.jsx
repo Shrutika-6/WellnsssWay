@@ -106,7 +106,7 @@ const cards = [
     description:
       "Discover how we aim to empower individual to understand and manage their emotions effectively. Learn about our mission. vision and the team behind Wellnesss Way",
     image: "/placeholder.svg?height=240&width=280&text=Smart+Recommendations",
-    path: "/about_us", // Added path for redirection
+    path: "/about", // Added path for redirection
   },
   {
     title: "🤖 Score Calculator",
