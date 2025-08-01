@@ -8,6 +8,7 @@ import Home from "./components/Home";
 import EmotionDetection from "./components/EmotionDetection";
 import MindfulExercises from "./components/MindfulExercises";
 import AboutUs from './components/AboutUs';
+// import Calculator from './components/Calculator';
 
 //SAD
 import Sad from "./components/sad";
