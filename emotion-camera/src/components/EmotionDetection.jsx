@@ -165,7 +165,7 @@ function EmotionDetection() {
           const newTime = prev + 1;
           if (newTime >= 15) {
             finishDetection();
-            return 10;
+            return 15;
           }
           return newTime;
         });
