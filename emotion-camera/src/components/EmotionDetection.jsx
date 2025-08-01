@@ -66,32 +66,32 @@ function EmotionDetection() {
   // Detection logic
   const captureAndSendFrame = useCallback(async () => {
     if (!videoRef.current || !canvasRef.current) return;
-    
+
     const video = videoRef.current;
     const canvas = canvasRef.current;
-    
+
     // Ensure proper canvas dimensions
-    canvas.width = 640;  // Fixed dimensions
+    canvas.width = 640; // Fixed dimensions
     canvas.height = 480;
-    
+
     const context = canvas.getContext("2d");
-    
+
     // Disable image smoothing for sharper images
     context.imageSmoothingEnabled = false;
-    
+
     // Draw video frame
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
-    
+
     try {
-        // Use PNG for lossless compression
-        const imageData = canvas.toDataURL("image/png");
-        
-        const response = await fetch("http://127.0.0.1:5000/predict", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ image: imageData }),
-        });
-        if (!response.ok) throw new Error("Network response was not ok");
+      // Use PNG for lossless compression
+      const imageData = canvas.toDataURL("image/png");
+
+      const response = await fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image: imageData }),
+      });
+      if (!response.ok) throw new Error("Network response was not ok");
 
       const data = await response.json();
       const detectedEmotion = data.emotion?.toLowerCase() || "neutral";
@@ -105,12 +105,12 @@ function EmotionDetection() {
         emotionCountsRef.current = updated;
         return updated;
       });
-        
-        // Rest of your code...
+
+      // Rest of your code...
     } catch (err) {
-        console.error("Detection error:", err);
+      console.error("Detection error:", err);
     }
-}, []);
+  }, []);
 
   // const captureAndSendFrame = useCallback(async () => {
   //   if (!videoRef.current || !canvasRef.current) return;
@@ -163,7 +163,7 @@ function EmotionDetection() {
         captureAndSendFrame();
         setDetectionTime((prev) => {
           const newTime = prev + 1;
-          if (newTime >= 10) {
+          if (newTime >= 15) {
             finishDetection();
             return 10;
           }
@@ -255,5 +255,3 @@ function EmotionDetection() {
 }
 
 export default EmotionDetection;
-
-
