@@ -5,11 +5,13 @@ import DetectionStatus from "./DetectionStatus";
 import StartButton from "./StartButton";
 import ResultSection from "./ResultSection";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function EmotionDetection() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [stream, setStream] = useState(null);
+  const { user } = useAuth();
 
   const [currentEmotion, setCurrentEmotion] = useState("Waiting to start...");
   const [stableEmotion, setStableEmotion] = useState(null);
@@ -174,7 +176,7 @@ function EmotionDetection() {
     return () => clearInterval(interval);
   }, [isDetecting, captureAndSendFrame]);
 
-  const finishDetection = useCallback(() => {
+  const finishDetection = useCallback(async () => {
     setIsDetecting(false);
     const counts = emotionCountsRef.current;
     const maxEmotion = Object.entries(counts).reduce(
@@ -184,7 +186,30 @@ function EmotionDetection() {
 
     setStableEmotion(maxEmotion);
     setCurrentEmotion(maxEmotion);
-  }, []);
+
+    // Save to backend
+    if (user && user._id) {
+      try {
+        const response = await fetch('http://localhost:3001/api/emotions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify({
+            userId: user._id,
+            emotion: maxEmotion
+          })
+        });
+
+        if (!response.ok) {
+          console.error('Failed to save emotion');
+        }
+      } catch (err) {
+        console.error('Error saving emotion:', err);
+      }
+    }
+  }, [user]); // Add user to dependencies if using auth context
 
   const handleStartDetection = useCallback(() => {
     setHasStarted(true);

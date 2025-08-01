@@ -5,21 +5,39 @@ import { useNavigate, Link } from "react-router-dom"
 import axios from "axios" 
 
 function Signup() {
-  const [name, setName] = useState()
-  const [email, setEmail] = useState()
-  const [password, setPassword] = useState()
-  const navigate = useNavigate() 
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [role, setRole] = useState('general');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    axios
-      .post("http://localhost:3001/user", { name, email, password })
-      .then((result) => {
-        navigate("/login") // From react-router-dom
-        console.log(result)
-      })
-      .catch((err) => console.error(err))
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const endpoint = role === 'doctor' 
+        ? 'http://localhost:3001/api/users/doctor' 
+        : 'http://localhost:3001/api/users';
+      
+      const response = await axios.post(endpoint, {
+        name,
+        email,
+        password,
+        role
+      });
+      
+      setSuccess('Registration successful! Please login.');
+      setError('');
+      setName('');
+      setEmail('');
+      setPassword('');
+      setTimeout(() => navigate('/login'), 2000);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Registration failed');
+      setSuccess('');
+    }
+  };
 
   return (
     <div
@@ -54,6 +72,8 @@ function Signup() {
           <p style={{ color: "#3f4247ff", fontSize: "0.875rem" }}>Enter your information to create an account</p>
         </div>
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+          {error && <p className="error">{error}</p>}
+      {success && <p className="success">{success}</p>}
           <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
             <label htmlFor="name" style={{ fontSize: "0.875rem", fontWeight: "500" }}>
               Name:
@@ -62,6 +82,7 @@ function Signup() {
               id="name"
               type="text"
               name="name"
+              value={name}
               required
               onChange={(e) => setName(e.target.value)}
               style={{
@@ -82,6 +103,7 @@ function Signup() {
               id="email"
               type="email"
               name="email"
+              value={email}
               required
               onChange={(e) => setEmail(e.target.value)}
               style={{
@@ -102,6 +124,7 @@ function Signup() {
               id="password"
               type="password"
               name="password"
+              value={password}
               required
               onChange={(e) => setPassword(e.target.value)}
               style={{
@@ -113,6 +136,30 @@ function Signup() {
                 lineHeight: "1.5rem",
               }}
             />
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+            <label htmlFor="role" style={{ fontSize: "0.875rem", fontWeight: "500" }}>
+              Role:
+            </label>
+            <select
+              id="role"
+              type="role"
+              name="role"
+              value={role}
+              required
+              onChange={(e) => setRole(e.target.value)}
+              style={{
+                padding: "0.625rem 0.75rem",
+                border: "1px solid #d1d5db",
+                borderRadius: "0.375rem",
+                width: "100%",
+                fontSize: "1rem",
+                lineHeight: "1.5rem",
+              }}
+            >
+              <option value="general">General User</option>
+            <option value="doctor">Doctor</option>
+            </select>
           </div>
           <button
             type="submit"

@@ -1,12 +1,12 @@
-"use client";
-import { useNavigate, Link } from "react-router-dom";
+"use client" 
+import { useNavigate, Link } from "react-router-dom" 
 
 export default function Home() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleStart = () => {
-    navigate("/emotion-detection");
-  };
+    navigate("/emotion-detection")
+  }
 
   return (
     <div style={styles.container}>
@@ -83,7 +83,7 @@ export default function Home() {
         </style>
       </div>
     </div>
-  );
+  )
 }
 
 const cards = [
@@ -136,8 +136,8 @@ const styles = {
   card: {
     backgroundColor: "rgba(25, 25, 35, 0.9)",
     borderRadius: "16px",
-    padding: "30px",
-    maxWidth: "650px",
+    padding: "30px", 
+    maxWidth: "650px", 
     width: "90%",
     textAlign: "center",
     marginBottom: "50px",
@@ -159,10 +159,10 @@ const styles = {
     lineHeight: "1.6",
   },
   quote: {
-    fontSize: "1rem",
+    fontSize: "1rem", 
     fontStyle: "italic",
     color: "rgba(255, 255, 255, 0.7)",
-    marginBottom: "30px",
+    marginBottom: "30px", 
     lineHeight: "1.5",
   },
   button: {
@@ -236,4 +236,4 @@ const styles = {
     color: "#e0e0e0",
     lineHeight: "1.5",
   },
-};
+}
