@@ -5,20 +5,27 @@ import axios from 'axios';
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios.post('http://localhost:3001/login', { email, password })
-      .then(result => {
-        console.log(result);
-        if (result.data === "Success") {
-          navigate("/home");
-        }
-      })
-      .catch(err => {
-        console.error(err);
+    try {
+      const response = await axios.post('http://localhost:3001/api/auth/login', {
+        email,
+        password
       });
+      
+      console.log('Login successful:', response.data);
+      // Redirect based on role
+      if (response.data.user.role === 'doctor') {
+        navigate('/home');
+      } else {
+        navigate('/home');
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Login failed');
+    }
   };
 
   return (
@@ -42,7 +49,7 @@ export default function Login() {
           boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
           width: "100%",
           maxWidth: "600px",
-          padding: "1.8rem",
+          padding: "2rem",
           boxSizing: "border-box",
         }}
       >
@@ -50,6 +57,7 @@ export default function Login() {
           <h2 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "0.5rem" }}>Login</h2>
           <p style={{ color: "#6b7280", fontSize: "0.875rem" }}>Enter your credentials to access your account</p>
         </div>
+        {error && <p className="error">{error}</p>}
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
             <label htmlFor="email" style={{ fontSize: "0.875rem", fontWeight: "500" }}>

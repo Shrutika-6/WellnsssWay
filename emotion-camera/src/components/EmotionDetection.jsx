@@ -5,11 +5,13 @@ import DetectionStatus from "./DetectionStatus";
 import StartButton from "./StartButton";
 import ResultSection from "./ResultSection";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function EmotionDetection() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [stream, setStream] = useState(null);
+  const { user } = useAuth();
 
   const [currentEmotion, setCurrentEmotion] = useState("Waiting to start...");
   const [stableEmotion, setStableEmotion] = useState(null);
@@ -66,32 +68,32 @@ function EmotionDetection() {
   // Detection logic
   const captureAndSendFrame = useCallback(async () => {
     if (!videoRef.current || !canvasRef.current) return;
-    
+
     const video = videoRef.current;
     const canvas = canvasRef.current;
-    
+
     // Ensure proper canvas dimensions
-    canvas.width = 640;  // Fixed dimensions
+    canvas.width = 640; // Fixed dimensions
     canvas.height = 480;
-    
+
     const context = canvas.getContext("2d");
-    
+
     // Disable image smoothing for sharper images
     context.imageSmoothingEnabled = false;
-    
+
     // Draw video frame
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
-    
+
     try {
-        // Use PNG for lossless compression
-        const imageData = canvas.toDataURL("image/png");
-        
-        const response = await fetch("http://127.0.0.1:5000/predict", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ image: imageData }),
-        });
-        if (!response.ok) throw new Error("Network response was not ok");
+      // Use PNG for lossless compression
+      const imageData = canvas.toDataURL("image/png");
+
+      const response = await fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image: imageData }),
+      });
+      if (!response.ok) throw new Error("Network response was not ok");
 
       const data = await response.json();
       const detectedEmotion = data.emotion?.toLowerCase() || "neutral";
@@ -105,12 +107,12 @@ function EmotionDetection() {
         emotionCountsRef.current = updated;
         return updated;
       });
-        
-        // Rest of your code...
+
+      // Rest of your code...
     } catch (err) {
-        console.error("Detection error:", err);
+      console.error("Detection error:", err);
     }
-}, []);
+  }, []);
 
   // const captureAndSendFrame = useCallback(async () => {
   //   if (!videoRef.current || !canvasRef.current) return;
@@ -163,9 +165,9 @@ function EmotionDetection() {
         captureAndSendFrame();
         setDetectionTime((prev) => {
           const newTime = prev + 1;
-          if (newTime >= 10) {
+          if (newTime >= 15) {
             finishDetection();
-            return 10;
+            return 15;
           }
           return newTime;
         });
@@ -174,7 +176,7 @@ function EmotionDetection() {
     return () => clearInterval(interval);
   }, [isDetecting, captureAndSendFrame]);
 
-  const finishDetection = useCallback(() => {
+  const finishDetection = useCallback(async () => {
     setIsDetecting(false);
     const counts = emotionCountsRef.current;
     const maxEmotion = Object.entries(counts).reduce(
@@ -184,7 +186,30 @@ function EmotionDetection() {
 
     setStableEmotion(maxEmotion);
     setCurrentEmotion(maxEmotion);
-  }, []);
+
+    // Save to backend
+    if (user && user._id) {
+      try {
+        const response = await fetch('http://localhost:3001/api/emotions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify({
+            userId: user._id,
+            emotion: maxEmotion
+          })
+        });
+
+        if (!response.ok) {
+          console.error('Failed to save emotion');
+        }
+      } catch (err) {
+        console.error('Error saving emotion:', err);
+      }
+    }
+  }, [user]); // Add user to dependencies if using auth context
 
   const handleStartDetection = useCallback(() => {
     setHasStarted(true);
@@ -255,5 +280,3 @@ function EmotionDetection() {
 }
 
 export default EmotionDetection;
-
-
