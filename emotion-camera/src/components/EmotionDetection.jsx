@@ -165,7 +165,7 @@ function EmotionDetection() {
         captureAndSendFrame();
         setDetectionTime((prev) => {
           const newTime = prev + 1;
-          if (newTime >= 15) {
+          if (newTime >= 10) {
             finishDetection();
             return 10;
           }
