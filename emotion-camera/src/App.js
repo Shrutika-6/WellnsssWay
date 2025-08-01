@@ -7,6 +7,7 @@ import Login from "./components/Login";
 import Home from "./components/Home";
 import EmotionDetection from "./components/EmotionDetection";
 import MindfulExercises from "./components/MindfulExercises";
+import AboutUs from './components/AboutUs';
 
 //SAD
 import Sad from "./components/sad";
@@ -350,6 +351,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/emotion-detection" element={<EmotionDetection />} />
         <Route path="/insights" element={<MindfulExercises />} />
+        <Route path="/about" element={<AboutUs />} />
         <Route path="/sad" element={<Sad />} />
         <Route path="/sad1a" element={<Sad1a />} />
         <Route path="/sad1b" element={<Sad1b />} />
