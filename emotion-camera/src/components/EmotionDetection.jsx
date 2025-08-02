@@ -179,6 +179,7 @@ function EmotionDetection() {
   // components/EmotionDetection.jsx
 const finishDetection = useCallback(async () => {
   setIsDetecting(false);
+
   const counts = emotionCountsRef.current;
   const maxEmotion = Object.entries(counts).reduce(
     (max, [emotion, count]) => (count > max.count ? { emotion, count } : max),
@@ -188,44 +189,54 @@ const finishDetection = useCallback(async () => {
   setStableEmotion(maxEmotion);
   setCurrentEmotion(maxEmotion);
 
-  // Get current auth state
-  const token = localStorage.getItem('token');
-  const storedUser = localStorage.getItem('user');
+  if (!user) {
+    console.error("User not authenticated (context missing)");
+    return;
+  }
 
-  if (!token || !storedUser) {
-    console.error('Authentication missing');
+  const token = localStorage.getItem('token');
+  if (!token) {
+    console.error("Token not found in localStorage");
     return;
   }
 
   try {
-    const user = JSON.parse(storedUser);
-    
-    console.log('Attempting to save emotion for user:', user._id); // Debug log
+    console.log("Attempting to save emotion for user:", user._id);
+    console.log("Token:", token);
 
-    const response = await fetch('http://localhost:3001/api/emotions', {
-      method: 'POST',
+    console.log("Stored user:", localStorage.getItem("user"));
+console.log("Parsed user:", JSON.parse(localStorage.getItem("user")));
+console.log("Token:", localStorage.getItem("token"));
+
+
+    const response = await fetch("http://localhost:3001/api/emotions", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        userId: user._id,
-        emotion: maxEmotion
-      })
+        userId: user?.id,
+        emotion: maxEmotion,
+      }),
     });
+
+    console.log(response);
+    
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error('Failed to save emotion:', errorData);
+      console.error("Failed to save emotion:", errorData);
       return;
     }
 
     const responseData = await response.json();
-    console.log('Emotion saved successfully:', responseData);
+    console.log("Emotion saved successfully:", responseData);
   } catch (err) {
-    console.error('Error saving emotion:', err);
+    console.error("Error saving emotion:", err);
   }
-}, []); // No dependencies needed since we're using localStorage directly
+}, [user]); // Make sure user is in dependencies
+
 
 useEffect(() => {
   console.log('Current user:', user);

@@ -30,7 +30,7 @@ const handleSubmit = async (e) => {
       localStorage.setItem('user', JSON.stringify(response.data.user));
       
       // Update context
-      login(response.data.user);
+      login(response.data.user, response.data.token);
       
       // Redirect based on role
       navigate(response.data.user.role === 'doctor' 
