@@ -9,7 +9,6 @@ const EmotionSchema = new mongoose.Schema({
   emotion: {
     type: String,
     required: true,
-    enum: ['angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral']
   },
   timestamp: {
     type: Date,

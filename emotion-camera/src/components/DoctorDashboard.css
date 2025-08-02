@@ -1,0 +1,114 @@
+.doctor-dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+.search-section {
+  margin-bottom: 30px;
+  background: #f5f5f5;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.search-section form {
+  display: flex;
+  gap: 10px;
+}
+
+.search-section input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.search-section button {
+  padding: 10px 20px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.search-section button:disabled {
+  background: #cccccc;
+}
+
+.users-list {
+  margin-bottom: 30px;
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.users-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.users-list li {
+  padding: 10px 15px;
+  margin: 5px 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.users-list li:hover {
+  background: #f0f0f0;
+}
+
+.users-list li.active {
+  background: #e3f2fd;
+  border-color: #2196F3;
+}
+
+.emotions-section {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.emotions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.emotion-card {
+  padding: 15px;
+  border-radius: 8px;
+  color: white;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.emotion-card h3 {
+  margin: 0 0 10px 0;
+  text-transform: capitalize;
+}
+
+.emotion-card p {
+  margin: 0;
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
+/* Emotion-specific colors */
+.emotion-card.happy { background: #4CAF50; }
+.emotion-card.sad { background: #2196F3; }
+.emotion-card.angry { background: #f44336; }
+.emotion-card.fear { background: #9C27B0; }
+.emotion-card.surprise { background: #FF9800; }
+.emotion-card.disgust { background: #795548; }
+.emotion-card.neutral { background: #607D8B; }

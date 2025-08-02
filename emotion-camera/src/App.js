@@ -4,6 +4,7 @@ import "./App.css";
 
 import Signup from "./components/Signup";
 import Login from "./components/Login";
+import DoctorDashboard from './components/DoctorDashboard';
 import Home from "./components/Home";
 import EmotionDetection from "./components/EmotionDetection";
 import MindfulExercises from "./components/MindfulExercises";
@@ -348,6 +349,8 @@ function App() {
          <Route path="/" element={<Signup />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        
+        <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
          
         <Route path="/home" element={<Home />} />
         <Route path="/emotion-detection" element={<EmotionDetection />} />
